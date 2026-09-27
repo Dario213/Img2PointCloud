@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PointCloud Viewer — STEM 2026</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div id="layout">
+  <!-- ── Sidebar ───────────────────────────── -->
+  <aside id="sidebar">
+    <div id="sidebar-header">
+      <div class="header-title"><span>▲</span> PointCloud Viewer</div>
+      <button id="sidebar-toggle" title="Collapse sidebar">‹</button>
+    </div>
+
+    <div id="sidebar-scroll">
+      <div class="section-title">Datasets</div>
+      <div id="dataset-list"></div>
+
+      <!-- Images / SIFT -->
+      <div id="images-section" style="display:none">
+        <div class="section-title" id="images-title">Images</div>
+        <div id="image-list"></div>
+      </div>
+
+      <!-- Point size slider -->
+      <div style="padding:10px 16px; border-top:1px solid var(--border); margin-top:6px">
+        <div class="section-title" style="padding:0 0 6px; display:flex; justify-content:space-between">
+          <span>Point Size</span><span id="point-size-val" style="color:var(--text)">1</span>
+        </div>
+        <input id="point-size" type="range" min="0.5" max="20" step="0.5" value="1"
+               style="width:100%; accent-color:var(--accent)">
+      </div>
+    </div>
+
+    <div id="sidebar-footer">
+      <button id="upload-btn">+ Upload &amp; Process Images</button>
+    </div>
+  </aside>
+
+  <!-- ── Canvas ───────────────────────────── -->
+  <div id="canvas-wrap">
+    <!-- Emscripten SDL2 requires id="canvas" -->
+    <canvas id="canvas"></canvas>
+
+    <div id="loading">Loading point cloud…</div>
+
+    <div id="overlay">
+      <b id="stat-label">No cloud loaded</b><br>
+      Points: <b id="stat-pts">—</b> &nbsp;|&nbsp; FPS: <b id="stat-fps">—</b>
+    </div>
+
+    <div id="hint">
+      Left drag: orbit &nbsp;·&nbsp; Right drag: pan &nbsp;·&nbsp; Scroll: zoom
+    </div>
+  </div>
+</div>
+
+<!-- ── SIFT Modal ────────────────────────── -->
+<div id="sift-modal">
+  <div id="sift-box">
+    <div id="sift-header">
+      <span id="sift-title">SIFT Features</span>
+      <button id="sift-close">✕</button>
+    </div>
+    <canvas id="sift-canvas"></canvas>
+    <div id="sift-info"></div>
+  </div>
+</div>
+
+<!-- ── Upload Modal ──────────────────────── -->
+<div id="upload-modal">
+  <div id="upload-box">
+    <h2>Upload &amp; Reconstruct</h2>
+
+    <div class="field">
+      <label>Images (PNG / JPG) — drag &amp; drop or click</label>
+      <div class="dropzone" id="dropzone">
+        Drop images here
+        <input type="file" id="file-input" multiple accept=".png,.jpg,.jpeg">
+      </div>
+      <div id="file-list" style="margin-top:4px"></div>
+    </div>
+
+    <div class="field">
+      <label>Camera positions file (optional — same format as boxInput.txt)</label>
+      <input type="file" id="camera-input" accept=".txt">
+    </div>
+
+    <div id="progress-log"></div>
+
+    <div id="upload-actions">
+      <button class="btn-cancel" id="upload-close">Cancel</button>
+      <button class="btn-primary" id="submit-btn">Reconstruct</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Emscripten WASM module ────────────── -->
+<script>
+  // Must be set before viewer.js loads so SDL2 attaches to our canvas element.
+  var Module = {
+    canvas: (function() { return document.getElementById('canvas'); })(),
+    onRuntimeInitialized: function() {
+      window._wasmReady = true;
+      window.dispatchEvent(new Event('wasmready'));
+    },
+    // Suppress the default Emscripten status/progress output in the page
+    print:    function(t) { console.log(t); },
+    printErr: function(t) { console.warn(t); },
+  };
+</script>
+<script src="viewer.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
