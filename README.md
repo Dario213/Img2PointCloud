@@ -1,4 +1,4 @@
-# STEM Games 2026 — 3D Point Cloud Reconstruction, MATHOSDOS
+# Img2PointCloud
 
 **Task:** Reconstruct 3D point clouds from multi-view images across four datasets.
 
