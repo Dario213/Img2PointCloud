@@ -59,11 +59,11 @@ For Box and Entrance, each `*Input.txt` file provides per-image camera position,
 |-----------|-------|--------|
 | `SIFT_NFEATURES` | 10,000 | Features per image |
 | `DOT_THRESH` | 0.70 | ~45° max angle between stereo pair cameras |
-| `NUM_DISP` | 768 | SGBM disparity search range (multiple of 16) |
-| `BLOCK_SIZE` | 7 | SGBM matching block size |
-| `TEXTURE_THRESH` | 1.0 | Min Sobel gradient to accept a pixel |
-| `uniquenessRatio` | 25 | SGBM confidence gate — rejects ambiguous matches |
-| `speckleWindowSize` | 400 | Speckle filter — removes isolated wrong-match blobs |
+| `NUM_DISP` | 256 | SGBM disparity search range (multiple of 16) |
+| `BLOCK_SIZE` | 11 | SGBM matching block size |
+| `TEXTURE_THRESH` | 15.0 | Lower tends to more surface coverage |
+| `uniquenessRatio` | 20 | SGBM confidence gate — rejects ambiguous matches |
+| `speckleWindowSize` | 200 | Speckle filter — removes isolated wrong-match blobs |
 | `max_depth` | baseline × 10 | Per-pair depth cap |
 
 ---
